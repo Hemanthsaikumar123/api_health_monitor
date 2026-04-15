@@ -1,4 +1,6 @@
 class Api < ApplicationRecord
+  has_many :health_checks, dependent: :destroy
+  
   validates :name, presence: true
   validates :url, presence: true
   validate :url_must_be_http_or_https

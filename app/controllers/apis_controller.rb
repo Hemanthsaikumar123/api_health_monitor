@@ -1,27 +1,33 @@
 class ApisController < ApplicationController
 
-
-  def index
-    @apis = Api.all
-  end
-
-  def new
-    @api = Api.new
-  end
-
-  def create
-    @api = Api.new(api_params)
-    if @api.save
-      redirect_to apis_path
-    else
-      render :new
+    def index
+        @apis = Api.all
     end
-  end
 
-  private
+    def new
+        @api = Api.new
+    end
 
-  def api_params
-    params.require(:api).permit(:name, :url)
-  end
+    def create
+        @api = Api.new(api_params)
+        if @api.save
+            redirect_to apis_path
+        else
+            render :new
+        end
+    end
+
+    def destroy
+        @api = Api.find(params[:id])
+        @api.destroy
+        redirect_to apis_path
+    end
+
   
+
+    private
+    def api_params
+        params.require(:api).permit(:name, :url)
+    end
+
 end

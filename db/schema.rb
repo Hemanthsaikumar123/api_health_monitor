@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_14_115806) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_15_104617) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,4 +20,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_14_115806) do
     t.datetime "updated_at", null: false
     t.string "url", null: false
   end
+
+  create_table "health_checks", force: :cascade do |t|
+    t.bigint "api_id", null: false
+    t.datetime "checked_at"
+    t.datetime "created_at", null: false
+    t.float "response_time"
+    t.string "status"
+    t.integer "status_code"
+    t.datetime "updated_at", null: false
+    t.index ["api_id"], name: "index_health_checks_on_api_id"
+  end
+
+  add_foreign_key "health_checks", "apis"
 end
