@@ -1,0 +1,19 @@
+<h1>Health Checks for <%= @api.name %></h1>
+
+<table>
+  <tr>
+    <th>Status</th>
+    <th>Response Time</th>
+    <th>Status Code</th>
+    <th>Checked At</th>
+  </tr>
+
+  <% @health_checks.each do |check| %>
+    <tr>
+      <td><%= check.status %></td>
+      <td><%= check.response_time %></td>
+      <td><%= check.status_code %></td>
+      <td><%= check.checked_at.strftime("%d %b %Y %I:%M %p") %></td>
+    </tr>
+  <% end %>
+</table>

@@ -5,6 +5,7 @@
 <ul>
   <% @apis.each do |api| %>
     <li><%= api.name %> - <%= api.url %></li>
+    <%= link_to "View Health", api_health_checks_path(api) %>
     <%= button_to "Delete", api_path(api), method: :delete %>
   <% end %>
 </ul>

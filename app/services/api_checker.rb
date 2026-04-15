@@ -17,7 +17,7 @@ class ApiChecker
         status: status,
         response_time: end_time - start_time,
         status_code: response.code.to_i,
-        checked_at: Time.now
+        checked_at: Time.current
       )
 
     rescue => e
