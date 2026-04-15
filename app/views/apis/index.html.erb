@@ -1,0 +1,9 @@
+<h1>APIs</h1>
+
+<%= link_to "Add API", new_api_path %>
+
+<ul>
+  <% @apis.each do |api| %>
+    <li><%= api.name %> - <%= api.url %></li>
+  <% end %>
+</ul>
