@@ -1,7 +1,10 @@
+
 <h1>Health Checks for <%= @api.name %></h1>
 
-<table>
-  <tr>
+<%= link_to "⬅ Back", apis_path %>
+
+<table border="1" width="100%" cellpadding="10" cellspacing="0">
+  <tr style="background-color: #f5f5f5;">
     <th>Status</th>
     <th>Response Time</th>
     <th>Status Code</th>
@@ -10,9 +13,16 @@
 
   <% @health_checks.each do |check| %>
     <tr>
-      <td><%= check.status %></td>
-      <td><%= check.response_time %></td>
-      <td><%= check.status_code %></td>
+      <td>
+        <% if check.status == "up" %>
+          <span style="color: green;">🟢 UP</span>
+        <% else %>
+          <span style="color: red;">🔴 DOWN</span>
+        <% end %>
+      </td>
+
+      <td><%= check.response_time&.round(2) || "-" %> s</td>
+      <td><%= check.status_code || "-" %></td>
       <td><%= check.checked_at.strftime("%d %b %Y %I:%M %p") %></td>
     </tr>
   <% end %>
