@@ -24,6 +24,18 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">API Health Monitor</div>
+        <nav class="topbar-nav">
+          <%= link_to "Dashboard", apis_path, class: "nav-link" %>
+          <%= link_to "Add API", new_api_path, class: "nav-link nav-link-primary" %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <%= yield %>
+    </main>
   </body>
 </html>

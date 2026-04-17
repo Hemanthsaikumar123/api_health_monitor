@@ -1,65 +1,60 @@
+<section class="card">
+  <div class="card-header">
+    <h1 class="page-title">API Health Dashboard</h1>
+    <%= link_to "Add API", new_api_path, class: "btn btn-primary" %>
+  </div>
 
-<% if @apis.empty? %>
-  <p>No APIs added yet.</p>
-<% end %>
+  <% if @apis.empty? %>
+    <p class="empty-state">No APIs added yet. Add your first endpoint to start monitoring.</p>
+  <% else %>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>URL</th>
+            <th>Status</th>
+            <th>Status Change</th>
+            <th>Response Time</th>
+            <th>Last Checked</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @apis.each do |api| %>
+            <% checks = api.health_checks.order(checked_at: :desc).limit(2).to_a %>
+            <% last_check = checks.first %>
+            <% prev_check = checks.second %>
 
-<h1 style="text-align:center;">API Health Dashboard</h1>
-
-<div style="width: 80%; margin: auto;">
-  <%= link_to "➕ Add API", new_api_path, style: "display:inline-block; margin-bottom: 20px;" %>
-
-  <table border="1" width="100%" cellpadding="10" cellspacing="0">
-    <tr style="background-color: #f5f5f5;">
-      <th>Name</th>
-      <th>URL</th>
-      <th>Status</th>
-      <th>Status Change</th>
-      <th>Response Time</th>
-      <th>Last Checked</th>
-      <th>Actions</th>
-    </tr>
-
-    <% @apis.each do |api| %>
-      <% last_check = api.health_checks.order(checked_at: :desc).first %>
-      <% prev_check = api.health_checks.order(checked_at: :desc).second %>
-
-      <tr>
-        <td><%= api.name %></td>
-        <td><%= api.url %></td>
-
-        <!-- STATUS -->
-        <td>
-          <% if last_check&.status == "up" %>
-            <span style="color: green; font-weight: bold;">🟢 UP</span>
-          <% else %>
-            <span style="color: red; font-weight: bold;">🔴 DOWN</span>
+            <tr>
+              <td><%= api.name %></td>
+              <td class="url-cell" title="<%= api.url %>"><%= api.url %></td>
+              <td>
+                <% if last_check&.status == "up" %>
+                  <span class="status-badge status-up">● UP</span>
+                <% else %>
+                  <span class="status-badge status-down">● DOWN</span>
+                <% end %>
+              </td>
+              <td>
+                <% if last_check && prev_check && last_check.status != prev_check.status %>
+                  <span class="status-change">Status changed</span>
+                <% else %>
+                  -
+                <% end %>
+              </td>
+              <td><%= last_check&.response_time ? "#{last_check.response_time.round(2)}s" : "-" %></td>
+              <td><%= last_check&.checked_at&.strftime("%d %b %Y %I:%M %p") || "-" %></td>
+              <td>
+                <div class="actions">
+                  <%= link_to "Logs", api_health_checks_path(api), class: "btn" %>
+                  <%= button_to "Delete", api_path(api), method: :delete, class: "btn btn-danger", form: { data: { turbo_confirm: "Delete #{api.name}?" } } %>
+                </div>
+              </td>
+            </tr>
           <% end %>
-        </td>
-
-        <td>
-          <% if last_check && prev_check && last_check.status != prev_check.status %>
-            <span style="color: orange; font-weight: bold;">⚠️ Status Changed</span>
-          <% end %>
-        </td>
-
-
-        <!-- RESPONSE TIME -->
-        <td>
-          <%= last_check&.response_time ? "#{last_check.response_time.round(2)}s" : "-" %>
-        </td>
-
-        <!-- TIME -->
-        <td>
-          <%= last_check&.checked_at&.strftime("%d %b %Y %I:%M %p") || "-" %>
-        </td>
-
-        <!-- ACTION -->
-        <td>
-          <%= link_to "View Logs", api_health_checks_path(api) %>
-          <%= button_to "Delete", api_path(api), method: :delete %>
-
-        </td>
-      </tr>
-    <% end %>
-  </table>
-</div>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</section>

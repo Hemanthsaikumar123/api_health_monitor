@@ -1,11 +1,22 @@
-<h1>Add API</h1>
+<section class="card">
+  <div class="card-header">
+    <h1 class="page-title">Add API</h1>
+    <%= link_to "Back", apis_path, class: "btn" %>
+  </div>
 
-<%= form_with model: @api do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
+  <%= form_with model: @api, class: "form-grid" do |f| %>
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name, placeholder: "Service name" %>
+    </div>
 
-  <%= f.label :url %>
-  <%= f.text_field :url %>
+    <div class="field">
+      <%= f.label :url %>
+      <%= f.text_field :url, placeholder: "https://api.example.com/health" %>
+    </div>
 
-  <%= f.submit "Create API" %>
-<% end %>
+    <div>
+      <%= f.submit "Create API", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</section>
