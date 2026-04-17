@@ -13,6 +13,7 @@
       <th>Name</th>
       <th>URL</th>
       <th>Status</th>
+      <th>Status Change</th>
       <th>Response Time</th>
       <th>Last Checked</th>
       <th>Actions</th>
@@ -20,6 +21,7 @@
 
     <% @apis.each do |api| %>
       <% last_check = api.health_checks.order(checked_at: :desc).first %>
+      <% prev_check = api.health_checks.order(checked_at: :desc).second %>
 
       <tr>
         <td><%= api.name %></td>
@@ -33,6 +35,13 @@
             <span style="color: red; font-weight: bold;">🔴 DOWN</span>
           <% end %>
         </td>
+
+        <td>
+          <% if last_check && prev_check && last_check.status != prev_check.status %>
+            <span style="color: orange; font-weight: bold;">⚠️ Status Changed</span>
+          <% end %>
+        </td>
+
 
         <!-- RESPONSE TIME -->
         <td>
